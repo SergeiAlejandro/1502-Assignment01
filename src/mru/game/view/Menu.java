@@ -7,8 +7,9 @@ import java.util.Scanner;
 
 import mru.game.controller.GameManager;
 import mru.game.model.Player;
+import mru.game.model.PuntoBancoGame;
 
-public class Menu {
+public class Menu extends GameManager{
 	/**
 	 * This class will be used to show the menus and sub menus to the user
 	 * It also prompts the user for the inputs and validates them 
@@ -32,7 +33,7 @@ public class Menu {
      * and processes the method chosen in the choice
      * It loops until user exits program
      */
-	public static void processMenu(GameManager app) throws FileNotFoundException {
+	public static void processMenu() throws FileNotFoundException {
 		
 		String answer;
 		char option;
@@ -46,28 +47,26 @@ public class Menu {
 			switch(option) {
 
 			case 'P':
-				//app.printGame();
-			break;
-				
-			case 'L':
+				System.out.println("Punto Blanco was selected");
+				//PuntoBancoGame test1 = new PuntoBancoGame();
 				
 			break;
 				
-			case 'R':
+			case 'S':
+				System.out.println("Search was selected");
 				
 			break;
-				
+					
 			default:
 				System.out.println("Invalid Option");
 			}
 			
 			showMenu();
-			System.out.print("\nPlease enter an option: ");
+			System.out.print("\nPlease enter a choice: ");
 			answer = kbd.next();
 			option = answer.toUpperCase().charAt(0);
 			
 		}
-		//app.printFile();
 		
 		kbd.close();
 		
