@@ -21,10 +21,34 @@ public class GameManager {
 	 * Depending on your designing technique you may need and you can add more methods here 
 	 */
 
-	ArrayList <Player> playerList = new ArrayList <Player>();
+	ArrayList <Player> playerList;
+	Scanner kbd = new Scanner(System.in);
 	
-	// Constructor
+	
+	/*
+	 * Constructor 
+	 * 
+	 * IDK what this does
+	 */
 	public GameManager() {
+		
+		playerList = new ArrayList <Player>();
+		
+		fileChecker();
+		
+	}
+		
+	
+	/*
+	 * Run method
+	 */
+	public void run() throws FileNotFoundException {
+		
+		Menu firstMenu = new Menu(this);
+		firstMenu.showMenu();
+					
+		Menu secondMenu = new Menu(this);
+		secondMenu.processMenu();
 		
 	}
 	
@@ -36,28 +60,35 @@ public class GameManager {
 	 * 
 	 * @return 
 	 */
-	public void run() throws FileNotFoundException {
-		
-		File inFile = new File ("res/CasinoInfo.txt");
-		File newFile = new File ("res/CasinoInfo.txt");
-		
-		if(newFile.exists()) { 
-			loadTextFile(newFile);
-			System.out.println("File has been loaded.");
+	public void fileChecker() {
+
+		try {
+			File inFile = new File ("res/CasinoInfo.txt");
+			File newFile = new File ("res/CasinoInfo.txt");
+
+			if(newFile.exists()) { 
+				loadTextFile(newFile);
+				System.out.println("File has been loaded.");
+			}
+			else {
+				loadTextFile(inFile);
+				System.out.println("File not found. File created.");
+			}
+
+			topPlayersSort();
+			
+
+		} catch (Exception e) {
+			System.out.println(e);
+			System.out.println("An error has occured. Try Again.");
+
 		}
-		else {
-			loadTextFile(inFile);
-			System.out.println("File not found. File created.");
-		}
-		
-		Menu.showMenu();
-		Menu.processMenu();
-		
+
 	}
 
 	
 	/**
-	 * Load File - Loads the text file
+	 * Load File - Loads the text file into the ArrayList
 	 * 
 	 * @param 
 	 * 
@@ -84,20 +115,17 @@ public class GameManager {
 			
 			// adds "individual" into the Array List (employeeList)
 			playerList.add(individualPlayer);
-			
-			// delete later
-			//System.out.println(individualPlayer);
-		}
 
+		}
+		
 		// delete later, just testing
 		topPlayersSort();
 		
 		in.close();
 		
-		
-
 	}
 
+	
 	/**
 	 * Print Players - Prints all players
 	 * 
@@ -117,6 +145,7 @@ public class GameManager {
 					
     }
 	
+    
 	/**
 	 * Top Player - Compares wins with all player and returns top wins
 	 * 
@@ -135,7 +164,7 @@ public class GameManager {
 			for(int j = size - 1; j > i; j--) { 
 				int secondPerson = playerList.get(j).getNumOfWins();
 
-				if(firstPerson > secondPerson) {
+				if(firstPerson < secondPerson) {
 					temp = playerList.get(i);
 					playerList.set(i,playerList.get(j));
 					playerList.set(j, temp);	
@@ -143,6 +172,7 @@ public class GameManager {
 			}
 		}
 	}
+	
 	
 	/**
 	 * Saves - Overwrites the text file with new updated info
@@ -164,11 +194,9 @@ public class GameManager {
 		i = 0;
 		while (i < playerListAmount) {
 			newPlayer = playerList.get(i);
-			outFile.println(newPlayer.toString());
+			outFile.println(newPlayer.getName() + ", " + (int) newPlayer.getBalance() + ", " + (int) newPlayer.getNumOfWins());
 			i++;
 		}
-		
-		printList();
 		
 		outFile.close();
 
@@ -182,29 +210,96 @@ public class GameManager {
 	 * 
 	 * @return foundPerson - boolean, true if last name exists.
 	 */
-	public boolean searchName(String nameSearched) {
-		
-		String whatWasSearched;
+	public void searchName(String nameSeached) {
+
+		String firstName;
+		int numWins;
+		double balance;
+		String searchParam;
 		int listLength;
 		boolean foundPerson = false;
 
-		whatWasSearched = nameSearched.substring(0,1).toUpperCase() + nameSearched.substring(1);
+		searchParam = nameSeached.substring(0,1).toUpperCase() + nameSeached.substring(1);
 		listLength = playerList.size();
+
 
 		int i = 0;
 		while (i < listLength && !foundPerson) {
-			
-			if (playerList.get(i).getName().equals(whatWasSearched)) {
+
+			if (playerList.get(i).getName().equalsIgnoreCase(searchParam)) {
+
+				firstName = playerList.get(i).getName();
+				numWins = playerList.get(i).getNumOfWins();
+				balance = playerList.get(i).getBalance();
+
+				System.out.println();
+				System.out.printf("%41s%n", "- PLAYER INFO -");
+				System.out.println("+=====================+=====================+=====================+");
+				System.out.println("|NAME                 |# WINS               |BALANCE              |");
+				System.out.println("+=====================+=====================+=====================+");
+				System.out.printf("|%-21s|%-21d|$%,-20.2f|%n", firstName, numWins, balance);
+				System.out.println("+=====================+=====================+=====================+");
 				foundPerson = true;
+
+				System.out.print("\nPress Enter to continue...");
+
+				// Checks if they entered "Enter"
+				String pressedEnter = kbd.nextLine();
+
+				if (pressedEnter.equals("")) {
+					System.out.println();
+				}
+				else {
+					pressedEnter = null;
+				}
+
 			}
-			
 			i++;
-			
 		}
 		
-		return foundPerson;
+		if (!foundPerson) {
+			System.out.println("Name does not exist.");
+			
+		}
+	}
+	
+	
+	/*
+	 * This is to get the top players from the arraylist
+	 */
+	public void getTopPlayers() {
+
+		Player playerOne = playerList.get(0);
+		Player playerTwo = playerList.get(1);
+		
+		String firstName = playerList.get(0).getName();
+		int numWins = playerList.get(0).getNumOfWins();
+		
+		String firstName2 = playerList.get(1).getName();
+		int numWins2 = playerList.get(1).getNumOfWins();
+		
+		System.out.println();
+		System.out.printf("%30s%n", "- TOP PLAYERS -");
+		System.out.println("+=====================+=====================+");
+		System.out.println("|NAME                 |# WINS               |");
+		System.out.println("+=====================+=====================+");
+		System.out.printf("|%-21s|%-21d|%n", firstName, numWins);
+		System.out.println("+---------------------+---------------------+");
+		System.out.printf("|%-21s|%-21d|%n", firstName2, numWins2);
+		System.out.println("+---------------------+---------------------+");
+		
+		System.out.print("\nPress Enter to continue...");
+
+		// Checks if they entered "Enter"
+		String pressedEnter = kbd.nextLine();
+
+		if (pressedEnter.equals("")) {
+			System.out.println();
+		}
+		else {
+			pressedEnter = null;
+		}
 		
 	}
-
-
+	
 }
