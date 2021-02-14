@@ -6,22 +6,27 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import mru.game.controller.GameManager;
+import mru.game.model.CardDeck;
 import mru.game.model.Player;
 import mru.game.model.PuntoBancoGame;
 
 public class Menu {
 	
 	Scanner kbd = new Scanner(System.in);
-	GameManager manager;
-	
+	GameManager createdNewGameManager;
+	PuntoBancoGame mainGame;
 	
 	/*
 	 * Constructor
+	 * 
+	 * To initialize things
+	 * 
 	 */
 	public Menu(GameManager gameMgr) {
-
-		manager = gameMgr;
-
+		
+		createdNewGameManager = gameMgr;
+		mainGame = new PuntoBancoGame(new CardDeck());
+		
 	}
 	
 	
@@ -88,17 +93,17 @@ public class Menu {
 
 			case 'P':
 				System.out.println("Punto Blanco was selected");
-				//PuntoBancoGame test1 = new PuntoBancoGame();
+				mainGame.run();
 				
 			break;
 				
 			case 'S':
 				subMenu();
-				
+			
 			break;
 			
 			case 'E':
-				manager.printFile();
+				createdNewGameManager.printFile();
 				System.out.println("Thank you for playing!");
 				System.out.println("Goodbye.");
 				System.exit(option);
@@ -142,7 +147,7 @@ public class Menu {
 
 			case 'T':
 				System.out.println();
-				manager.getTopPlayers();
+				createdNewGameManager.getTopPlayers();
 				
 			break;
 				
@@ -151,7 +156,7 @@ public class Menu {
 				System.out.print("What is your name: ");
 				
 				String nameSearchParam = kbd.next();
-				manager.searchName(nameSearchParam);
+				createdNewGameManager.searchName(nameSearchParam);
 
 			break;
 			
@@ -161,10 +166,12 @@ public class Menu {
 			break;
 			
 			case 'E':
-				manager.printFile();
+				createdNewGameManager.printFile();
 				System.out.println("Thank you for playing!");
 				System.out.println("Goodbye.");
-				System.exit(option);
+				// we should probably fix this later *****************************
+				//System.exit(option);
+			break;
 					
 			default:
 				System.out.println("Invalid Option");
