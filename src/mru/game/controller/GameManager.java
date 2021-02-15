@@ -21,7 +21,7 @@ public class GameManager {
 	 * Depending on your designing technique you may need and you can add more methods here 
 	 */
 
-	ArrayList <Player> playerList;
+	public ArrayList <Player> playerList;
 	Scanner kbd = new Scanner(System.in);
 	
 	
@@ -67,7 +67,7 @@ public class GameManager {
 
 			if(newFile.exists()) { 
 				loadTextFile(newFile);
-				System.out.println("File has been loaded.");
+				//System.out.println("File has been loaded.");
 			}
 			else {
 				loadTextFile(inFile);
@@ -299,6 +299,10 @@ public class GameManager {
 			pressedEnter = null;
 		}
 		
+	}
+	
+	public ArrayList<Player> getArrayList(){
+		return playerList;
 	}
 	
 }

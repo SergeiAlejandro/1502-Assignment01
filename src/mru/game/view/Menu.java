@@ -71,6 +71,24 @@ public class Menu {
     }
     
     
+    /**
+     * game-Sub-Menu
+     * 
+     */
+    public void gameSubMenu() {
+    	
+        System.out.println("\nWhat do you want to bet on? ");
+        System.out.println();
+        System.out.println("\t(P) Player Wins");
+        System.out.println("\t(B) Banker Wins");
+        System.out.println("\t(T) Tie Game");
+        System.out.println();
+        System.out.print("Enter your choice: ");
+        
+	
+    }
+    
+    
     /*
      * Process Menu
      * 
@@ -92,8 +110,20 @@ public class Menu {
 			switch(option) {
 
 			case 'P':
-				System.out.println("Punto Blanco was selected");
-				mainGame.run();
+				// Create deck
+					// Shuffle cards
+					// deck stays the same through entire game
+				
+				// Set bet limit to account balance (if  bal == 0, return to main menu)
+				// When program ends, save amd print data to file.
+				// all user inputs must be validated 
+				
+				mainGame.run(); // runs punto banco game
+				gameSubMenu(); // shows the menu
+				processGameSubMenu(); // user input does process
+				
+				// delete this later, dont need
+				System.exit(option);
 				
 			break;
 				
@@ -152,7 +182,7 @@ public class Menu {
 			break;
 				
 			case 'N':
-				System.out.println();
+				System.out.println("");
 				System.out.print("What is your name: ");
 				
 				String nameSearchParam = kbd.next();
@@ -185,4 +215,64 @@ public class Menu {
 		kbd.close();
 		
 	}
+	
+	
+    /*//
+     * Process Game Menu
+     * 
+     * This checks what the user has chosen 
+     * and processes the method chosen in the choice
+     * It loops until user exits program
+     */
+	public void processGameSubMenu() throws FileNotFoundException {
+		
+		String answer;
+		char option;
+		//boolean keepRunning = true;
+		Scanner kbd = new Scanner(System.in);
+		
+		answer = kbd.next();
+		option = answer.toUpperCase().charAt(0);
+		
+		//while(true) {
+			
+			switch(option) {
+
+			case 'P': // betting on the player winning
+				System.out.println("you are here: Player Wins");
+				mainGame.betAmmount();
+				
+				
+				//keepRunning = false;
+			break;
+				
+			case 'B': // betting on the banker winning
+				System.out.println("you are here: Banker Wins");
+				mainGame.betAmmount();
+
+				
+				//keepRunning = false;
+			break;
+			
+			case 'T': // betting on a tie game.
+				System.out.println("you are here: Tie Game");
+				mainGame.betAmmount();
+				
+				
+				//keepRunning = false;
+			break;
+					
+			default:
+				System.out.println("Invalid Option");
+			}
+			
+//			showMenu();
+//			processMenu();
+			
+		//}
+		
+			kbd.close();
+		
+	}
+	
 }
